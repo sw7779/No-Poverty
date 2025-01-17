@@ -11,8 +11,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Sample Data
-data = pd.read_excel("/content/latest data PDS.xlsx")
+#  Data
+data = pd.read_excel("latest data PDS.xlsx")
 
 # Data Preprocessing
 data['is_urban'] = data['is_urban'].astype(int)
