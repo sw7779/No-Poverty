@@ -15,10 +15,10 @@ import seaborn as sns
 data = pd.read_excel("latest data PDS.xlsx")
 
 # Data Preprocessing
-data['is_urban'] = data['is_urban'].astype(int)
-data['female'] = data['female'].astype(int)
-data['married'] = data['married'].astype(int)
-data['employed_last_year'] = data['employed_last_year'].astype(int)
+    data['is_urban'] = data['is_urban'].astype(int)
+    data['female'] = data['female'].astype(int)
+    data['married'] = data['married'].astype(int)
+    data['employed_last_year'] = data['employed_last_year'].astype(int)
 
     # Sidebar Filters
     st.sidebar.title("Filters")
