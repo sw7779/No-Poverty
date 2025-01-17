@@ -12,24 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Sample Data
-data = pd.DataFrame({
-    'is_urban': [False, True, False, False, False],
-    'poverty_probability': [0.515, 0.981, 0.982, 0.879, 0.796],
-    'age': [18, 30, 20, 61, 26],
-    'female': [True, True, True, False, True],
-    'married': [True, True, True, True, True],
-    'relationship_to_hh_head': ['Other', 'Other', 'Spouse', 'Head', 'Spouse'],
-    'education_level': [1, 1, 1, 0, 1],
-    'employed_last_year': [False, False, True, True, False],
-    'employment_category_last_year': [
-        'housewife_or_student', 'housewife_or_student',
-        'employed', 'employed', 'housewife_or_student'
-    ],
-    'employment_type_last_year': [
-        'not_working', 'not_working', 'irregular_seasonal',
-        'self_employed', 'not_working'
-    ]
-})
+data = pd.read_excel("/content/latest data PDS.xlsx")
 
 # Data Preprocessing
 data['is_urban'] = data['is_urban'].astype(int)
