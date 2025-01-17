@@ -11,17 +11,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-# Load data dynamically
+# File uploader for the dataset
 uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
 
 if uploaded_file is not None:
+    # Load the dataset
     data = pd.read_excel(uploaded_file)
 
-    # Data Preprocessing
+    # Handle missing values
     data['is_urban'] = data['is_urban'].astype(int)
     data['female'] = data['female'].astype(int)
     data['married'] = data['married'].astype(int)
     data['employed_last_year'] = data['employed_last_year'].astype(int)
+
+    # Handle missing values for critical columns
+    data['education_level'].fillna("Unknown", inplace=True)
+    data['relationship_to_hh_head'].fillna("Unknown", inplace=True)
+    data['employment_category_last_year'].fillna("Unknown", inplace=True)
+    data['employment_type_last_year'].fillna("Unknown", inplace=True)
 
     # Sidebar Filters
     st.sidebar.title("Filters")
@@ -118,5 +125,7 @@ if uploaded_file is not None:
     ax.set_ylabel("Poverty Probability")
     plt.xticks(rotation=45)
     st.pyplot(fig)
+
 else:
     st.warning("Please upload an Excel file to proceed.")
+
