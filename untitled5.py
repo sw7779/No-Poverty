@@ -97,15 +97,16 @@ if uploaded_file is not None:
     st.title("Poverty Insights Dashboard")
     st.metric("Average Poverty Probability", f"{filtered_data['poverty_probability'].mean():.2f}")
 
-    # Visualization 1: Bar Chart - Average Poverty Probability by Employment Category
-    st.subheader("Average Poverty Probability by Employment Category")
-    employment_avg_poverty = filtered_data.groupby('employment_category_last_year')['poverty_probability'].mean()
-    fig, ax = plt.subplots(figsize=(8, 6))
-    employment_avg_poverty.plot(kind='bar', color='skyblue', ax=ax)
-    ax.set_title("Average Poverty Probability by Employment Category")
-    ax.set_ylabel("Average Poverty Probability")
-    ax.set_xlabel("Employment Category")
-    st.pyplot(fig)
+    # Visualization 1: Bar Chart - Average Poverty Probability by Employment Type
+        st.subheader("Average Poverty Probability by Employment Type")
+        employment_avg_poverty = filtered_data.groupby('employment_type_last_year')['poverty_probability'].mean()
+        fig, ax = plt.subplots(figsize=(8, 6))
+        employment_avg_poverty.plot(kind='bar', color='skyblue', ax=ax)
+        ax.set_title("Average Poverty Probability by Employment Type")
+        ax.set_ylabel("Average Poverty Probability")
+        ax.set_xlabel("Employment Type")
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
 
     # Visualization 2: Pie Chart - Distribution of Relationship to Household Head
     st.subheader("Distribution of Relationship to Household Head")
