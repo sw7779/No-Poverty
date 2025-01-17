@@ -65,8 +65,6 @@ plt.ylabel("Importance")
 plt.xlabel("Features")
 plt.show()
 
-!pip install streamlit
-
 import streamlit as st
 
 # Sidebar Filters
