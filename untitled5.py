@@ -23,8 +23,6 @@ if uploaded_file is not None:
     data['female'] = data['female'].astype(int)
     data['married'] = data['married'].astype(int)
     data['employed_last_year'] = data['employed_last_year'].astype(int)
-
-    # Handle missing values for critical columns
     data['education_level'].fillna("Unknown", inplace=True)
     data['relationship_to_hh_head'].fillna("Unknown", inplace=True)
     data['employment_category_last_year'].fillna("Unknown", inplace=True)
@@ -32,33 +30,27 @@ if uploaded_file is not None:
 
     # Sidebar Filters
     st.sidebar.title("Filters")
-
-    # Filter 1: Urban/Rural
     urban_filter = st.sidebar.radio("Urban or Rural?", options=["Urban", "Rural"], index=0)
     is_urban = 1 if urban_filter == "Urban" else 0
 
-    # Filter 2: Relationship to Household Head
     relationship_filter = st.sidebar.multiselect(
         "Relationship to Household Head",
         options=data["relationship_to_hh_head"].unique(),
         default=data["relationship_to_hh_head"].unique()
     )
 
-    # Filter 3: Employment Category
     employment_category_filter = st.sidebar.multiselect(
         "Employment Category",
         options=data["employment_category_last_year"].unique(),
         default=data["employment_category_last_year"].unique()
     )
 
-    # Filter 4: Employment Type
     employment_type_filter = st.sidebar.multiselect(
         "Employment Type",
         options=data["employment_type_last_year"].unique(),
         default=data["employment_type_last_year"].unique()
     )
 
-    # Filter 5: Age Range
     age_range = st.sidebar.slider(
         "Select Age Range",
         min_value=int(data["age"].min()),
@@ -66,18 +58,15 @@ if uploaded_file is not None:
         value=(int(data["age"].min()), int(data["age"].max()))
     )
 
-    # Filter 6: Marital Status
     marital_status_filter = st.sidebar.radio("Marital Status", options=["Married", "Not Married"], index=0)
     married_status = 1 if marital_status_filter == "Married" else 0
 
-    # Filter 7: Education Level
     education_level_filter = st.sidebar.multiselect(
         "Education Level",
         options=data["education_level"].unique(),
         default=data["education_level"].unique()
     )
 
-    # Filter 8: Employment Status
     employment_status_filter = st.sidebar.radio("Employment Status", options=["Employed", "Not Employed"], index=0)
     employment_status = 1 if employment_status_filter == "Employed" else 0
 
@@ -93,11 +82,15 @@ if uploaded_file is not None:
         (data["employed_last_year"] == employment_status)
     ]
 
-    # Key Metrics
-    st.title("Poverty Insights Dashboard")
-    st.metric("Average Poverty Probability", f"{filtered_data['poverty_probability'].mean():.2f}")
+    # Check for Empty Filtered Data
+    if filtered_data.empty:
+        st.warning("No data available for the selected filters.")
+    else:
+        # Key Metrics
+        st.title("Poverty Insights Dashboard")
+        st.metric("Average Poverty Probability", f"{filtered_data['poverty_probability'].mean():.2f}")
 
-    # Visualization 1: Bar Chart - Average Poverty Probability by Employment Type
+        # Visualization 1: Bar Chart - Average Poverty Probability by Employment Type
         st.subheader("Average Poverty Probability by Employment Type")
         employment_avg_poverty = filtered_data.groupby('employment_type_last_year')['poverty_probability'].mean()
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -108,24 +101,14 @@ if uploaded_file is not None:
         plt.xticks(rotation=45)
         st.pyplot(fig)
 
-    # Visualization 2: Pie Chart - Distribution of Relationship to Household Head
-    st.subheader("Distribution of Relationship to Household Head")
-    relationship_distribution = filtered_data['relationship_to_hh_head'].value_counts()
-    fig, ax = plt.subplots(figsize=(8, 6))
-    relationship_distribution.plot(kind='pie', autopct='%1.1f%%', startangle=90, colors=sns.color_palette("pastel"), ax=ax)
-    ax.set_title("Distribution of Relationship to Household Head")
-    ax.set_ylabel("")  # Hide y-label for clarity
-    st.pyplot(fig)
-
-    # Visualization 3: Box Plot - Poverty Probability by Employment Categories
-    st.subheader("Poverty Probability by Employment Categories")
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.boxplot(data=filtered_data, x='employment_category_last_year', y='poverty_probability', ax=ax, palette='Set2')
-    ax.set_title("Poverty Probability by Employment Categories")
-    ax.set_xlabel("Employment Category")
-    ax.set_ylabel("Poverty Probability")
-    plt.xticks(rotation=45)
-    st.pyplot(fig)
-
+        # Visualization 2: Box Plot - Poverty Probability by Employment Categories
+        st.subheader("Poverty Probability by Employment Categories")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.boxplot(data=filtered_data, x='employment_category_last_year', y='poverty_probability', ax=ax, palette='Set2')
+        ax.set_title("Poverty Probability by Employment Categories")
+        ax.set_xlabel("Employment Category")
+        ax.set_ylabel("Poverty Probability")
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
 else:
     st.warning("Please upload an Excel file to proceed.")
